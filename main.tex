@@ -1,0 +1,412 @@
+% Template:     Informe/Reporte LaTeX
+% Documento:    Archivo principal
+% Versión:      6.3.7 (29/06/2019)
+% Codificación: UTF-8
+%
+% Autor: Pablo Pizarro R. @ppizarror
+%        Facultad de Ciencias Físicas y Matemáticas
+%        Universidad de Chile
+%        pablo.pizarro@ing.uchile.cl, ppizarror.com
+%
+% Manual template: [https://latex.ppizarror.com/Template-Informe/]
+% Licencia MIT:    [https://opensource.org/licenses/MIT/]
+
+% CREACIÓN DEL DOCUMENTO
+%
+\documentclass[letterpaper,11pt]{article} % Articulo tamaño carta, 11pt
+\usepackage[utf8]{inputenc} % Codificación UTF-8
+
+% INFORMACIÓN DEL DOCUMENTO
+\def\titulodelinforme {Proyecto Final}
+\def\temaatratar {Diseño de una Red de Fibra Óptica}
+
+\def\autordeldocumento {Hojin Kang, Eduardo Salazar, Nicolás Marticorena, Javier Urrutia}
+\def\nombredelcurso {Introducción al Taller de Proyecto}
+\def\codigodelcurso {EL5001-2}
+
+\def\nombreuniversidad {Universidad de Chile}
+\def\nombrefacultad {Facultad de Ciencias Físicas y Matemáticas}
+\def\departamentouniversidad {Departamento de la Universidad}
+\def\imagendepartamento {departamentos/die}
+\def\imagendepartamentoescala {0.2}
+\def\localizacionuniversidad {Santiago, Chile}
+
+% INTEGRANTES, PROFESORES Y FECHAS
+\def\tablaintegrantes {
+\begin{tabular}{ll}
+	Integrantes:
+	& \begin{tabular}[t]{l}
+		Hojin Kang \\
+		Eduardo Salazar \\
+		Nicolás Marticorena \\
+		Javier Urrutia
+	\end{tabular} \\
+	Profesor:
+	& \begin{tabular}[t]{l}
+		Sergio Bunel
+	\end{tabular} \\
+	\multicolumn{2}{l}{Fecha de entrega: 11 de julio de 2019} \\
+	\multicolumn{2}{l}{\localizacionuniversidad}
+\end{tabular}}{
+}
+
+% CONFIGURACIONES
+\input{lib/config}
+
+% IMPORTACIÓN DE LIBRERÍAS
+\input{lib/env/imports}
+
+% IMPORTACIÓN DE FUNCIONES Y ENTORNOS
+\input{lib/cmd/all}
+
+% IMPORTACIÓN DE ESTILOS
+\input{lib/style/all}
+
+% CONFIGURACIÓN INICIAL DEL DOCUMENTO
+\input{lib/cfg/init}
+
+% INICIO DE LAS PÁGINAS
+\begin{document}
+	
+% PORTADA
+\input{lib/page/portrait} % Se puede borrar
+
+% CONFIGURACIÓN DE PÁGINA Y ENCABEZADOS
+\input{lib/cfg/page}
+
+% TABLA DE CONTENIDOS - ÍNDICE
+\input{lib/page/index} % Se puede borrar
+
+% CONFIGURACIONES FINALES
+\input{lib/cfg/final}
+
+% ======================= INICIO DEL DOCUMENTO =======================
+\section{Introducción}
+
+\newp
+En el siguiente informe se presenta el diseño y comparación de dos soluciones para una red de comunicaciones entre las plantas Ujina y Calama para la Compañía Minera Santa Inés de Collahuasi. (CSM)
+
+\newp
+La red de comunicaciones entre las plantas tiene una longitud de $210[km]$ y se necesita una capacidad de $8\times1[GbE]$ full rate hasta Calama, los cuales serán utilizados para telefonía móvil, internet y control de los procesos industriales.
+
+\newp
+Para el problema anterior, a continuación se presentan dos soluciones que consideran equipamiento óptico de la familia OSN 8800 Huawei. Las soluciones corresponden a una con transpondedores con modulación on-off key (OOK), mientras que la otra solución utiliza modulación coherente.
+
+\newp
+Para ambas soluciones se presentan los detalles del diseño de la red, en particular los equipos que se utilizan en cada una de las estaciones, los cableados, los balances de potencia, dispersión, OSNR, márgenes disponibles en los parámetros, requerimientos de espacio y energía, y como se satisfacen éstos, instrumentos necesarios para el \textit{Commissioning}, pruebas de aceptación, SLA comprometido y el CAPEX y OPEX de ambas soluciones.
+
+\newp
+Una vez se tienen los detalles de ambos proyectos, se procede a compararlos, finalmente realizando una comparación y recomendación técnica de cual de las soluciones se debería implementar, y la Carta Gantt del proyecto a partir de la recomendación.
+
+\newp
+Con el proyecto se busca comprender los distintos pasos y detalles a considerar durante el desarrollo de un proyecto de diseño de red de Fibra Óptica, mediante el diseño de dos soluciones distintas a un problema de telecomunicaciones específico.
+
+\newpage
+\section{Diseño de la Red}
+
+A continuación se presentan los diseños de las soluciones propuestas para el proyecto. Como se menciona anteriormente la principal diferencia entre las soluciones se debe a que la primera solución utiliza transpondedores con modulación OOK, mientras que la segunda utiliza modulación coherente.
+
+\subsection{Primer Diseño: Modulación OOK}
+
+\subsubsection{Ingeniería de Detalle}
+
+Se empieza presentando la ingeniería de detalle del primer diseño, el cual utiliza modulación OOK. Primero se empieza presentando la estructura de las estaciones base para presentar los distintos componentes que se utilizan.
+
+\insertimage[\label{estacion_base}]{estacion_base}{width=12cm}{Diagrama de las estaciones base.}
+
+\newp
+Los componentes que se aprecian en la Figura \ref{estacion_base} son un transpondedor, MUX, DMUX, OSC, amplificador booster, amplificador pre-amplifier, FiU y ODF. Es importante notar que en las estaciones bases no es necesario considerar la alimentación de los componentes, debido a que esta se provee por parte de la Compañía Minera. Además de los componentes que se pueden apreciar en la Figura \ref{estacion_base}, hay que considerar los rack y subrack en los cuales se debe insertar los componentes. Considerando lo anterior, a continuación se presenta la lista de componentes con su respectivo modelo.
+
+% =====================================================================================
+% RELLENAR VALORES PARA LOS RACK Y SUBRACK EN LA TABLA
+% =====================================================================================
+\begin{table}[H]
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Componente}        & \textbf{Modelo} & \textbf{Cantidad} \\ \hline
+Transpondedor              & TN12LOG         & 1                 \\ \hline
+Multiplexor                & T11M40          & 1                 \\ \hline
+Demultiplexor              & T11D40          & 1                 \\ \hline
+Amplificador Booster       & TN12OBU104      & 1                 \\ \hline
+Amplificador Pre-Amplifier & TN12OAU105      & 1                 \\ \hline
+FIU                        & TN12FIU         & 1                 \\ \hline
+ODF                        & ODF E-2000      & 1                 \\ \hline
+OSC                        & ST2             & 1                 \\ \hline
+Rack                       & ETSI 300mm      & 1                  \\ \hline
+Subrack                    & OTN 8800 Universal Platform Subrack & 1                  \\ \hline
+\end{tabular}
+\caption{Lista de Componentes para Estación Base.}
+\end{table}
+
+\newp
+Además de lo anterior se presentan las conexiones que deben tener los componentes. Para esto se presenta el diagrama de cableado de la estación en la siguiente figura.
+\insertimage[\label{estacion_base}]{img/ook_diagramas/ujina_electrico.png}{width=10cm}{Diagrama de conexión de estación base de Ujina plano electrico}
+\insertimage[\label{estacion_base}]{img/ook_diagramas/ujina_optico.png}{width=12cm}{Diagrama de conexión de estación base de Ujina plano optico}
+\newp
+Las estaciones bases tienen diagramas de conexión equivalentes por lo que solo se presenta el diagrama de la estación de Ujina, el diagrama de la estación base de Crucero se adjunta en el anexo.
+\newp
+Además de las estaciones bases, existe la necesidad de tener estaciones intermedias de amplificación. A continuación se presenta la estructura de éstas.
+
+\insertimage[\label{estacion_amplificacion}]{diagrama_amplificacion.png}{width=12cm}{Diagrama de las estaciones de amplificación.}
+
+\newp
+En la Figura \ref{estacion_amplificacion} se aprecia que los componentes que se utilizan en la estación de amplificación son ODF, FIU, amplificadores, DCM y OSC. En la siguiente Tabla se presentan los modelos que se utilizan para cada componente y el número de cada uno que es necesario.
+
+% =====================================================================================
+% AGREGAR LAS COSAS PARA CABLES DEL ODF AQUI Y EN EL PPT
+% ====================================================================================
+
+
+\begin{table}[H]
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Componente} & \textbf{Modelo}     & \textbf{Cantidad} \\ \hline
+ODF                 & ODF E-2000          & 2                 \\ \hline
+FIU                 & TN12FIU             & 2                 \\ \hline
+Amplificador        & TN12OBU104          & 2                 \\ \hline
+Amplificador        & TN12OAU105          & 2                 \\ \hline
+DCM                 & TN11DCU04/TN11DCU05 & 2                 \\ \hline
+OSC                 & ST2                 & 1                 \\ \hline
+Rack                & ETSI 300mm          & 1                 \\ \hline
+Subrack             & OTN 8800 Universal Platform Subrack & 1 \\ \hline
+\end{tabular}
+\caption{Componentes necesarios para estación de amplificación.}
+\end{table}
+
+\newp
+Es importante notar que los valores de la Tabla 2 son por estación. Para el primer diseño se necesitan dos etapas de amplificación, por lo cual los componentes de la Tabla 2 deben ser multiplicados por dos. Otro punto importante es que hay dos modelos de amplificador, esto se debe a que uno es de bajo ruido (TN12OBU104), el cual se conecta antes del DCM, mientras que el otro (TN12OAU105) se conecta después del DCM. Esto se debe a que así se disminuye la cifra de ruido de la etapa de amplificación.
+
+\newp
+Otro punto importante a notar es que hay dos modelos para el DCM. Lo anterior se debe a que la cantidad de dispersión compensada es distinta en las dos estaciones mencionadas anteriormente, por lo que un DCM modelo de DCM (TN11DCU04) se utiliza en la primera estación de amplificación, mientras que el otro (TN11DCU05) se utiliza en la otra estación de amplificación. 
+\newp
+Además de lo anterior se presentan las conexiones que deben tener los componentes. Para esto se presenta el diagrama de cableado de la estación de amplificación en la siguiente figura.
+\insertimage[\label{estacion_base}]{img/ook_diagramas/ola1.png}{width=12cm}{Diagrama de conexión de estación de amplificación 1.}
+\newp
+Como se menciono las estaciones de amplificación tienen la misma estructura y solo varia el modelo de DCM por lo que el diagrama de la estación de amplificación 2(más cercana a Crucero) se adjunta en el anexo.
+\newp
+En las estaciones de amplificación la Compañía Minera no provee la energía, por lo que es importante realizar el cálculo de la potencia necesaria para alimentar la estación. A continuación se presenta el cálculo de potencia para la estación de amplificación.
+
+\input{ampli1.tex}
+
+
+\newp
+La potencia previamente calculada se alimenta con paneles solares. Es importante notar que los paneles solares no tienen una potencia constante durante el día, por lo que también es importante la inclusión de una batería para poder alimentar la estación durante todo el día. A continuación se presentan los paneles y baterías necesarios para poder alimentar la estación de amplificación.
+
+\input{Paneles1.tex}
+
+\newp
+A partir de lo anterior se procede a presentar el diseño de la primera red completa, donde se utilizan bloques de estaciones base y amplificación , los cuales se deberían reemplazar por los bloques de las Figuras \ref{estacion_base} y \ref{estacion_amplificacion} respectivamente.
+
+\insertimage[\label{diseño_uno}]{diseno_uno.png}{width=12cm}{Diagrama del primer diseño.}
+
+\newp
+Notar que aunque el diseño anterior parece implicar que la comunicación es en un sentido esto es simplemente para simplificar la visualización del esquema, y en realidad la comunicación es full-duplex. Además es importante notar que la Fibra Óptica que se utiliza es una Fibra Óptica Monomodo que que cumple con las especificaciones de la especificación G 652 de la ITU. En particular se utiliza la Fibra Óptica LSH/APC-LSH/APC 3mm SM simplex optical cable G.652D.
+
+\newp
+Con el diseño anterior y las especificaciones de las estaciones bases y de amplificación, y considerando que los transpondedores tienen una potencia enviada de $-3[dBm]$ se pueden calculas las métricas relevantes para la red. Éstas métricas se presentan en la siguiente tabla.
+
+\begin{table}[H]
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Métrica}     & \textbf{Valor Obtenido} & \textbf{Valores Límite} & \textbf{Margen}  \\ \hline
+Potencia de Llegada  & -8.5{[}dBm{]}           & -16$\sim$0{[}dBm{]}     & 7.5{[}dBm{]}     \\ \hline
+Dispersión           & 540{[}ps/nm{]}          & 800{[}ps/nm{]}          & 260{[}ps/nm{]}   \\ \hline
+OSNR                 & 21.93{[}dB{]}           & 18{[}dB{]}              & 3.93{[}dB{]}    \\ \hline
+Largo Máximo por PMD & 27777.78{[}km{]}        & 210{[}km{]}             & 27567.78{[}km{]} \\ \hline
+\end{tabular}
+\caption{Métricas obtenidas y márgenes.}
+\end{table}
+
+\newp
+De la tabla anterior se aprecia que los márgenes obtenidos entregan una gran holgura al sistema en caso de alguna falla. Notar que en la potencia de llegada el margen es de $7.5[dB]$, lo cual es superior a los $4.6[dB]$ que se deberían tener de margen ($3[dB]$ por envejecimiento, $1[dB]$ por dispersión y $0.6[dB]$ correspondientes al $25\%$ de la atenuación por los splices para reparaciones).
+
+\newp
+Luego de tener el diseño implementado es necesario realizar pruebas para validar que el sistema se encuentra funcionando de manera correcta. Para esto es necesario una serie de dispositivos, los cuales se presentan a continuación.
+
+\begin{itemize}
+    \item \textbf{Power Meter Óptico: }Utilizado para medir la potencia en las distintas etapas de la transmisión, comprobando que éstas se encuentren entre los valores esperados.
+    \item \textbf{Optical Spectrum Analyzer: }Se utiliza para analizar el espectro de la señal, para poder visualizar los niveles de ruido, los \textit{peaks} y otras características importantes del espectro.
+    \item \textbf{Analizador de Transmisión: }Se utiliza para medir distintas métricas como BER, \textit{throughput}, \textit{delay} e \textit{Inter Frame Gap}, para validar el funcionamiento del sistema.
+    \item \textbf{Q-Meter: }Se utiliza para medir la probabilidad de error de la red.
+\end{itemize}
+
+\newp
+Con los elementos previamente presentados es necesario realizar pruebas para validar que la red se encuentre funcionando de manera correcta. Las primeras mediciones que se deben hacer es de potencia en las estaciones bases y en las estaciones de amplificación. Para esto se utiliza el \textit{Power Meter Óptico}. En particular a la salida de la tarjeta de línea deben haber aproximadamente $-3[dBm]$, luego después del amplificador booster deben haber aproximadamente $6[dBm]$. A la entrada del amplificador de la primera estación de amplificación deben haber aproximadamente $-13[dBm]$, mientras que después del amplificador deben haber aproximadamente $18[dBm]$. En la entrada de la segunda estación de amplificación deben haber aproximadamente $-17.5[dBm]$, mientras que a su salida deben haber aproximadamente $17.5[dBm]$. Finalmente en la estación de llegada (estación base en la cual se mide la llegada), deben haber aproximadamente $-8.5[dBm]$.
+
+\newp
+El OSNR, que se mide con el \textit{Optical Spectrum Analyzer}, y su valor antes del DMUX final debe ser cercano a los $21.93[dB]$ mencionados en la Tabla 3, siendo superior al límite de $18[dB]$ del transpondedor. Además se debe medir el OSNR después de la amplificación en cada estación de amplificación. Luego de la primera estación de amplificación el OSNR debe ser aproximadamente $48.66[dB]$, mientras que después de la segunda estación de amplificación el OSNR debe ser aproximadamente $47.94[dB]$.
+
+\newp
+También se debe medir el BER de uno de los 8 canales, durante un periodo de a lo menos 24 horas, y no deben haber errores. El proceso se debe repetir para los otro 7 canales, pero con un tiempo de por lo menos 15 minutos. Además el \textit{throughput} que se mide en este mismo periodo, en cada uno de los canales debe ser de $1[GbE]$, o de $1.25[Gbps]$. El \textit{delay} debería ser cercano a $\frac{210\times10^{3}[m]}{2\times 10^{8}} = 1.05[ms]$, sin embargo por los retardos de los dispositivos debería ser algo mayor a este valor. Estos parámetros se deben medir con el Analizador de Transmisión. 
+
+\newp
+Para los \textit{Service Level Agreements} (SLA) se considera que habrá un corte de Fibra Óptica al año cada $100[km]$ de Fibra Óptica. Considerando que el tramo es de $210[km]$ y que hay Fibra Óptica para ambos lados, se considera que en promedio deberían haber $\approx 4.2$ cortes al año. Por lo anterior se consideran $6$ cortes al año para tener holgura, y se considera que cada corte se arregla en un tiempo de $10$ horas. Considerando lo anterior se tendrán $60$ horas anuales en las cuales puede estar cortado el servicio, o equivalentemente se tendrá un $99.3 \%$ de disponibilidad.
+
+\newp
+También se debe medir el factor Q con el \textit{Q-Meter} para validar la calidad de la red, ya que el BER es muy bajo y no se puede medir en un tiempo corto (solo se puede validar que deberían haber 0 errores), el \textit{Q-Meter} se usa para la validación de la calidad de la red.
+
+\subsubsection{CAPEX}
+%\input{Capex1.tex}
+\newp
+Se aprecia que la mayoría del CAPEX es el costo de la Fibra Óptica. Lo anterior es importante de considerar, ya que hará que la diferencia entre los CAPEX de ambos proyectos no sea muy grande (debido a que el costo de la Fibra Óptica es la misma para ambos proyectos). 
+
+
+\subsubsection{OPEX}
+
+\newpage
+\subsection{Segundo Diseño: Modulación Coherente}
+
+Se presenta el segundo diseño para la red, la cual corresponde a un diseño considerando transpondedores con modulación coherente. La ventaja que tiene este diseño es que no es necesario preocuparse de la dispersión, ya que la modulación coherente tiene una tolerancia mucho mayor a la dispersión que la modulación OOK.
+
+\subsubsection{Ingeniería de Detalle}
+
+Para la ingeniería de detalle de la segunda solución, se empieza presentado la estructura de las estaciones base para presentar los distintos componentes que se utilizan.
+
+\insertimage[\label{estacion_base_dos}]{estacion_base_dos.png}{width=12cm}{Diagrama de la estación base en el Segundo Diseño.}
+
+\newp
+A partir de la Figura \ref{estacion_base_dos} se aprecia que los componentes necesarios para las estaciones base son tarjeta tributaria, matriz OTN, tarjeta de línea, MUX, DMUX, amplificador booster, amplificador pre-amplifier, OSC, FIU y ODF. Nuevamente para las estaciones bases no es necesario considerar la potencia, ya que esta sería entregada por la Compañía Minera. Además de los componentes de la Figura \ref{estacion_base_dos} se encuentran los rack y subrack que no se muestran en el diagrama. La lista de los distintos modelos para los componentes y su número se presenta en la siguiente Tabla.
+
+% =====================================================================================
+% AGREGAR LAS COSAS PARA CABLES DEL ODF AQUI Y EN EL PPT
+% ====================================================================================
+\begin{table}[H]
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Componente}        & \textbf{Modelo} & \textbf{Cantidad} \\ \hline
+Tarjeta Tributaria         & TN52TOG01       & 1                 \\ \hline
+Matriz OTN                 & TN52UXCM        & 2                 \\ \hline
+Tarjeta de Línea           & TN54NS4T01      & 1                 \\ \hline
+Multiplexor                & T11M40          & 1                 \\ \hline
+Demultiplexor              & T11D40          & 1                 \\ \hline
+Amplificador Booster       & TN12OBU104      & 1                 \\ \hline
+Amplificador Pre-Amplifier & TN13OBU105      & 1                 \\ \hline
+FIU                        & TN12FIU         & 1                 \\ \hline
+ODF                        & ODF E-4000      & 1                 \\ \hline
+OSC                        & ST2             & 1                 \\ \hline
+Rack                       &   ETSI 300mm              &   1                \\ \hline
+Subrack                    &      OTN 8800 Universal Platform Subrack           & 1                  \\ \hline
+\end{tabular}
+\caption{Componentes necesarios para la estación base del Diseño Dos.}
+\end{table}
+
+Es importante notar que tanto la Matriz OTN como la Tarjeta de Línea tienen una capacidad mucho mayor que la Tarjeta Tributaria, sin embargo basta con dejar los puertos inutilizados de la Matriz OTN y Tarjeta de Línea desconectados. Además solo se necesita una Matriz OTN para las conexiones de la Figura \ref{estacion_base_dos}, sin embargo se ponen dos para que se cambie de una a la otra en caso de que falle una.
+
+\newp
+La tarjeta de línea utilizada, TN54NS4T01 es una tarjeta que tiene la capacidad de utilizar modulación coherente, y por ende tiene un valor de dispersión máxima de $40000[ps/nm]$.
+
+\newp
+Además del diagrama para las estaciones base, es importante conocer las conexiones necesarias para éstas estaciones. Estas conexiones se presentan a continuación.
+
+%\insertimage[\label{estacion_base}]{img/cohe_diagramas/UJINA_ELECTRICO.png}{width=12cm}{Diagrama de conexión de estación base de Ujina plano electrico}
+%\insertimage[\label{estacion_base}]{img/cohe_diagramas/ujina_optico.png}{width=12cm}{Diagrama de conexión de estación base de Ujina plano optico}
+\newp
+Al igual que en el primer diseño las estaciones bases tienen diagramas de conexión equivalentes por lo que solo se presenta el diagrama de la estación de Ujina, el diagrama de la estación base de Crucero se adjunta en el anexo.
+\newp
+Sumado a las estaciones bases presentadas, es necesario tener una estación de amplificación en este diseño. El diagrama para la estación de amplificación se presenta en el siguiente diagrama.
+
+\insertimage[\label{estacion_amplificacion_dos}]{estacion_amplificacion_dos.png}{width=12cm}{Diagrama de la estación de amplificación en el Segundo Diseño.}
+
+\newp
+Comparando este diseño con el de la estación de amplificación del Diseño Uno que se aprecia en la Figura \ref{estacion_amplificacion} se aprecia que la mayor diferencia es que en la Estación de Amplificación del Diseño dos no son necesarios DCM, lo cual se debe a que la modulación coherente permite que se tenga una mayor dispersión sin la necesidad de compensarla.
+
+\newp
+A partir de la Figura \ref{estacion_amplificacion_dos} se observa que los componentes necesarios para esta estación son ODF, FIU, amplificador y OSC, además de los rack y subrack correspondientes. Estos componentes se presentan en la siguiente Tabla.
+
+% =====================================================================================
+% AGREGAR LAS COSAS PARA CABLES DEL ODF AQUI Y EN EL PPT
+% ====================================================================================
+\begin{table}[H]
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Componente} & \textbf{Modelo}     & \textbf{Cantidad} \\ \hline
+ODF                 & ODF E-4000          & 2                 \\ \hline
+FIU                 & TN12FIU             & 2                 \\ \hline
+Amplificador        & TN13OBU105          & 2                 \\ \hline
+OSC                 & ST2                 & 1                 \\ \hline
+Rack                       &   ETSI 300mm              &   1                \\ \hline
+Subrack                    &      OTN 8800 Universal Platform Subrack           & 1                  \\ \hline
+\end{tabular}
+\caption{Componentes necesarios para estación de amplificación en el Diseño Dos.}
+\end{table}
+\newp
+Además del diagrama para la estación de amplificación, es importante conocer las conexiones necesarias para éstas estaciones. Estas se presentan a continuación.
+\newp
+%\insertimage[\label{estacion_base}]{img/cohe_diagramas/OLA.png}{width=12cm}{Diagrama de conexión de estación de amplificación}
+\newp
+Para la estación de amplificación la Compañía Minera no provee la energía por lo cual es necesario calcular la potencia de la estación para poder diseñar algún sistema que permita obtener la energía necesaria para la estación. Estos cálculos se presentan a continuación.
+
+\input{ampli2.tex}
+
+\newp
+Considerando la potencia calculada previamente se utilizan paneles solares para proveer la potencia a la estación. Además se vuelve necesario utilizar una batería para proveer la energía cuando el panel solar no puede producir potencia (por ejemplo durante la noche). A continuación se presentan los componentes necesarios para suplir la potencia necesaria en la estación de amplificación.
+
+\input{Paneles2.tex}
+
+\newp
+A partir de los diagramas de las Estaciones Base y Estaciones de Amplificación presentados previamente se procede a presentar el diseño de la red completa, utilizando los diagramas previamente presentados como bloques. Considerando lo anterior se obtiene el siguiente diagrama para la red completa. 
+
+\insertimage[\label{diseño_dos}]{diagrama_diseno_dos.png}{width=12cm}{Diagrama del segundo diseño.}
+
+\newp
+Notar que aunque el Diagrama de la Figura \ref{diseño_dos} se hizo para un lado, en realidad la red diseñada tiene la característica de ser full-duplex. Además debido a la distancia entre las estaciones, el tipo de Fibra Óptica que se utiliza es una Fibra Óptica Monomodo que cumple con las especificaciones de la especificación G 652 de la ITU. En particular se utiliza la Fibra Óptica LSH/APC-LSH/APC 3mm SM simplex optical cable G.652D.
+
+\newp
+Considerando lo anterior, y considerando que la tarjeta de línea tiene una potencia de salida de $-3[dBm]$ se obtienen los siguiente parámetros para la red.
+
+\begin{table}[H]
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Métrica}     & \textbf{Valor Obtenido} & \textbf{Valores Límite} & \textbf{Margen}  \\ \hline
+Potencia de Llegada  & -8.45{[}dBm{]}           & -16$\sim$0{[}dBm{]}     & 7.55{[}dBm{]}     \\ \hline
+Dispersión           & 3780{[}ps/nm{]}          & 40000{[}ps/nm{]}          & 36220{[}ps/nm{]}   \\ \hline
+OSNR                 & 19.44{[}dB{]}           & 14{[}dB{]}              & 5.44{[}dB{]}    \\ \hline
+Largo Máximo por PMD & 27777.78{[}km{]}        & 210{[}km{]}             & 27567.78{[}km{]} \\ \hline
+\end{tabular}
+\caption{Métricas obtenidas y márgenes para le diseño dos.}
+\end{table}
+
+\newp
+De los valores de la Tabla anterior, se aprecia que los márgenes obtenidos son aún mejores que aquellos obtenidos en el diseño uno, y que se presentan en la Tabla 3. Notar que en la potencia de llegada el margen es de $7.55[dB]$, lo cual es superior a los $4.6[dB]$ que se deberían tener de margen ($3[dB]$ por envejecimiento, $1[dB]$ por dispersión y $0.6[dB]$ correspondientes al $25\%$ de la atenuación por los splices para reparaciones).
+
+\newp
+Luego de tener el diseño implementado es necesario realizar pruebas para validar que el sistema funciona de manera correcta. Para esto es necesario tener los dispositivos necesarios, los cuales se enumeran a continuación.
+
+\begin{itemize}
+    \item \textbf{Power Meter Óptico: }Utilizado para medir la potencia en las distintas etapas de la transmisión, comprobando que éstas se encuentren entre los valores esperados.
+    \item \textbf{Optical Spectrum Analyzer: }Se utiliza para analizar el espectro de la señal, para poder visualizar los niveles de ruido, los \textit{peaks} y otras características importantes del espectro.
+    \item \textbf{Analizador de Transmisión: }Se utiliza para medir distintas métricas como BER, \textit{throughput}, \textit{delay} e \textit{Inter Frame Gap}, para validar el funcionamiento del sistema.
+    \item \textbf{Optical Modulator Analyzer: }Analiza el funcionamiento correcto del sistema con modulación coherente.
+\end{itemize}
+
+\newp
+Con los elementos previamente presentados es necesario realizar pruebas para validar que la red se encuentre funcionando de manera correcta. Las primeras mediciones que se deben hacer es de potencia en las estaciones bases y en la estación de amplificación. Para esto se utiliza el \textit{Power Meter Óptico}. En particular a la salida de la tarjeta de línea deben haber aproximadamente $-3[dBm]$, luego después del amplificador booster deben haber aproximadamente $6[dBm]$. A la entrada del amplificador en la estación de amplificación deben haber aproximadamente $-20.7[dBm]$, mientras que después del amplificador deben haber aproximadamente $2.3[dBm]$. Finalmente en la estación de llegada (estación base en la cual se mide la llegada), deben haber aproximadamente $-24.95[dBm]$ antes del amplificador pre-amplifier, y finalmente aproximadamente $-8.45[dBm]$ antes de la última tarjeta de línea.
+
+\newp
+El OSNR, que se mide con el \textit{Optical Spectrum Analyzer}, y su valor antes del DMUX final debe ser cercano a los $19.44[dB]$ mencionados en la Tabla 6, siendo superior al límite de $14[dB]$ de la tarjeta de línea. Además se debe medir el OSNR después de la amplificación en la estación de amplificación, y se debe tener un valor de $45,98[dB]$. 
+
+\newp
+También se debe medir el BER de uno de los 8 canales, durante un periodo de a lo menos 24 horas, y no deben haber errores. El proceso se debe repetir para los otro 7 canales, pero con un tiempo de por lo menos 15 minutos. Además el \textit{throughput} que se mide en este mismo periodo, en cada uno de los canales debe ser de $1[GbE]$, o de $1.25[Gbps]$. El delay se calcula de manera similar al del primer diseño, por lo que tiene que encontrarse cercano a los $1.05[ms]$. Estos parámetros se deben medir con el Analizador de Transmisión. 
+
+\newp
+Debido a que el número de cortes de Fibra Óptica será similar al caso del primer diseño, podemos decir que para los SLA se considera una disponibilidad de $99.3\%$.
+\subsubsection{CAPEX}
+
+%\input{Capex2.tex}
+
+\subsubsection{OPEX}
+
+
+\newpage
+\section{Comparación de las Soluciones}
+
+\newp
+Para la comparación de las soluciones planteadas se empezará realizando una comparación económica (en términos de CAPEX y OPEX) de ambos proyectos.
+\newpage
+\section{Planificación del Proyecto}
+
+\newpage
+\section{Conclusiones}
+
+% FIN DEL DOCUMENTO
+\end{document}
